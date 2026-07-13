@@ -3,7 +3,7 @@ services:
   - type: web
     runtime: docker
     name: knot
-    plan: starter
+    plan: free
     healthCheckPath: /readyz
     maxShutdownDelaySeconds: 60
     envVars:
@@ -27,5 +27,5 @@ databases:
     databaseName: knot
     user: knot
     postgresMajorVersion: "17"
-    plan: basic-256mb
+    plan: free
     ipAllowList: []

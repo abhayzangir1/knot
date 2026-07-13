@@ -19,7 +19,7 @@ describe("production packaging boundary", () => {
     expect(dockerfile).not.toMatch(/COPY\s+\.env/iu);
   });
 
-  it("keeps Render secrets account-side and requires managed readiness", async () => {
+  it("keeps Render free, secrets account-side, and requires managed readiness", async () => {
     const blueprint = await repositoryFile("render.yaml");
 
     expect(blueprint).toContain(
@@ -30,6 +30,8 @@ describe("production packaging boundary", () => {
     expect(blueprint).toContain('postgresMajorVersion: "17"');
     expect(blueprint).toContain("ipAllowList: []");
     expect(blueprint.match(/sync: false/gu)).toHaveLength(2);
+    expect(blueprint.match(/^\s+plan: free$/gmu)).toHaveLength(2);
+    expect(blueprint).not.toMatch(/^\s+plan: (?:starter|basic-|standard|pro)/gmu);
     expect(blueprint).not.toMatch(/xox[baprs]-/iu);
   });
 

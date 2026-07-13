@@ -18,7 +18,12 @@ Devpost acceptance evidence.
   and meets the acknowledgement budget through the temporary test tunnel.
 - [x] Judge-ready architecture diagram exists as
   [SVG](architecture.svg) and [PNG](architecture.png).
-- [ ] Render Blueprint creates the web service and PostgreSQL database.
+- [ ] Render Blueprint creates one Free web service and one Free PostgreSQL
+  database, with no paid instance selected.
+- [ ] Render billing shows no unintended paid resource; set the workspace spend
+  limit to zero where the account supports it.
+- [ ] Wake `/readyz` to HTTP 200 immediately before Slack judging or recording;
+  do not count a Free-tier cold start as acknowledgement-latency evidence.
 - [ ] Stable `/healthz`, `/readyz`, and `/slack/events` URLs are verified.
 - [ ] Stable-host acknowledgement/security probe passes and is recorded in
   [PLANS.md](../PLANS.md).

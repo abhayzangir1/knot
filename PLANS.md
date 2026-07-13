@@ -92,8 +92,10 @@ Message shortcut
   digest-pinned bases, runs as the non-root `node` user, exposes health and
   readiness endpoints, and serializes migrations. Local PostgreSQL is bound to
   loopback; Render is configured for its managed database and `/readyz`. This
-  packaging adds no integration, outcome type, or product surface, and no live
-  Render deployment is claimed until account-side evidence is captured.
+  packaging adds no integration, outcome type, or product surface. Both Render
+  resources are explicitly Free; the documented cold-start and 30-day database
+  limits make this a hackathon sandbox, not always-on production hosting. No
+  live Render deployment is claimed until account-side evidence is captured.
 - A clean no-cache image build reports zero dependency vulnerabilities. The
   running image is healthy in production mode as the non-root `node` user;
   `/healthz` and `/readyz` both return 200, `.env`, `.git`, source, and tests are

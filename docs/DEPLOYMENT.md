@@ -6,6 +6,15 @@ distribution; D-035 remains the credential-lifecycle boundary.
 
 ## Stable Render deployment
 
+The checked-in Blueprint deliberately requests Render's **Free** instance type
+for both the web service and PostgreSQL. This is a zero-cost hackathon sandbox,
+not production infrastructure: Render documents that a Free web service spins
+down after 15 minutes without inbound traffic and can take about one minute to
+wake, while a Free PostgreSQL database is limited to 1 GB, expires after 30
+days, and has no backups. Do not upgrade either resource while following this
+runbook. If a payment method exists, set the workspace spend limit to zero and
+monitor included usage in Render before deployment.
+
 1. Put this exact repository revision in a private GitHub, GitLab, or Bitbucket
    repository. Confirm that `.env`, logs, and credentials are absent from the
    commit and repository history.
@@ -20,7 +29,11 @@ distribution; D-035 remains the credential-lifecycle boundary.
 4. Wait for the Docker build, serialized database migrations, and `/readyz`
    health check to pass. A successful build without a 200 readiness response is
    not a successful deployment.
-5. Open both endpoints from a separate network path:
+5. Because the Free web service can sleep, open `/readyz` and wait for HTTP 200
+   immediately before every Slack test, reviewer session, or recorded demo.
+   A request that wakes a sleeping instance can miss Slack's three-second
+   acknowledgement deadline and is not valid latency evidence. Then open both
+   endpoints from a separate network path:
 
    ```text
    https://YOUR-RENDER-HOST/healthz
@@ -55,6 +68,9 @@ distribution; D-035 remains the credential-lifecycle boundary.
 
 - `/healthz` proves the process is serving HTTP; `/readyz` additionally proves
   the database and durable worker are available.
+- The Free Render deployment is suitable for the time-bounded hackathon demo,
+  but its cold starts, usage limits, database expiry, and lack of backups mean
+  it must not be described as always-on or production infrastructure.
 - The container runs as the non-root `node` user and includes only production
   dependencies, built output, migrations, entrypoint, and the acknowledgement
   probe. The `npm`/`npx` CLIs are removed after dependency installation because

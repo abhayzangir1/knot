@@ -107,7 +107,11 @@ The checked-in Docker and Render files are a bounded way to host this same
 Phase-1 receiver at a stable TLS URL for the live Slack gate. They do not add a
 product surface, connector, outcome type, or claim of a live deployment. The
 image uses digest-pinned bases and a non-root runtime; account-side Render
-configuration and the public endpoint still require live verification.
+configuration and the public endpoint still require live verification. The
+Blueprint pins both resources to Render's Free instance type. Because that tier
+sleeps when idle and its database expires after 30 days, it is a hackathon
+sandbox rather than always-on production infrastructure; wake and verify
+`/readyz` immediately before a Slack test or judge session.
 
 Passing automation does not by itself complete the live Slack gate. After any
 manifest, scope, or deployment change, rerun the exact sandbox flow in
