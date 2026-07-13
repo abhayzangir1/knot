@@ -16,14 +16,14 @@ of always-on production infrastructure.
 1. Use the public GitHub repository at the exact tested revision. Confirm that
    `.env`, logs, database URLs, and credentials are absent from the commit and
    repository history.
-2. Create a Neon Free project named `knot` in **AWS US West (Oregon)** and use
+2. Create a Neon Free project named `knot` in **AWS US East (Ohio)** and use
    PostgreSQL 17. Do not enable Neon Auth or add sample data. In **Connect**,
    select the primary branch and copy the **Direct connection** string with
    `sslmode=require`. The direct endpoint is required because Knot's serialized
    migrator takes a session-level PostgreSQL advisory lock; the application
    already bounds its own pool.
 3. In Render, create a Blueprint from the repository's root `render.yaml`. The
-   Blueprint creates only one Oregon web service on `plan: free`; it cannot
+   Blueprint creates only one Ohio web service on `plan: free`; it cannot
    silently create a paid or expiring Render database.
 4. Enter `DATABASE_URL`, `SLACK_SIGNING_SECRET`, and `SLACK_BOT_TOKEN` only in
    Render's secret fields. `DATABASE_URL` is the Neon Direct connection string.

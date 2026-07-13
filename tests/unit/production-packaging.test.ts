@@ -25,7 +25,7 @@ describe("production packaging boundary", () => {
     expect(blueprint).toContain(
       "# yaml-language-server: $schema=https://render.com/schema/render.yaml.json",
     );
-    expect(blueprint).toContain("region: oregon");
+    expect(blueprint).toContain("region: ohio");
     expect(blueprint).toContain("healthCheckPath: /healthz");
     expect(blueprint).not.toContain("healthCheckPath: /readyz");
     expect(blueprint).not.toContain("fromDatabase:");

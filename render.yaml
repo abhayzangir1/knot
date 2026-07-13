@@ -3,7 +3,7 @@ services:
   - type: web
     runtime: docker
     name: knot
-    region: oregon
+    region: ohio
     plan: free
     healthCheckPath: /healthz
     envVars:

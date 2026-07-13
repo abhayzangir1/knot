@@ -96,9 +96,9 @@ Message shortcut
   receiver at the stable TLS URL the live Slack test requires. The image uses
   digest-pinned bases, runs as the non-root `node` user, exposes health and
   readiness endpoints, and serializes migrations. Local PostgreSQL is bound to
-  loopback. Render is configured as one Free Oregon web service with `/healthz`
+  loopback. Render is configured as one Free Ohio web service with `/healthz`
   liveness; durable state uses a secret Neon Free PostgreSQL 17 Direct URL in
-  the matching Oregon region. Neon has no Free-plan time limit, avoiding the
+  the matching Ohio region. Neon has no Free-plan time limit, avoiding the
   30-day Render database expiry. This packaging adds no integration, outcome
   type, or product surface. No live deployment is claimed until account-side
   evidence is captured. After deployment, one secret-free five-minute external

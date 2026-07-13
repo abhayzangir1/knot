@@ -18,9 +18,9 @@ Devpost acceptance evidence.
   and meets the acknowledgement budget through the temporary test tunnel.
 - [x] Judge-ready architecture diagram exists as
   [SVG](architecture.svg) and [PNG](architecture.png).
-- [ ] Neon Free PostgreSQL 17 project exists in Oregon with no sample data;
+- [ ] Neon Free PostgreSQL 17 project exists in Ohio with no sample data;
   Direct TLS connection succeeds and Free usage limits are visible.
-- [ ] Render Blueprint creates exactly one Free Oregon web service and no
+- [ ] Render Blueprint creates exactly one Free Ohio web service and no
   Render database or paid instance.
 - [ ] Render billing shows no unintended paid resource; set the workspace spend
   limit to zero where the account supports it.
