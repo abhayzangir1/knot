@@ -5,7 +5,6 @@ services:
     name: knot
     plan: free
     healthCheckPath: /readyz
-    maxShutdownDelaySeconds: 60
     envVars:
       - key: NODE_ENV
         value: production

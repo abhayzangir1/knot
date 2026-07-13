@@ -32,6 +32,7 @@ describe("production packaging boundary", () => {
     expect(blueprint.match(/sync: false/gu)).toHaveLength(2);
     expect(blueprint.match(/^\s+plan: free$/gmu)).toHaveLength(2);
     expect(blueprint).not.toMatch(/^\s+plan: (?:starter|basic-|standard|pro)/gmu);
+    expect(blueprint).not.toContain("maxShutdownDelaySeconds");
     expect(blueprint).not.toMatch(/xox[baprs]-/iu);
   });
 

@@ -96,6 +96,9 @@ Message shortcut
   resources are explicitly Free; the documented cold-start and 30-day database
   limits make this a hackathon sandbox, not always-on production hosting. No
   live Render deployment is claimed until account-side evidence is captured.
+  After deployment, one secret-free five-minute external `/readyz` probe keeps
+  the judge endpoint warm and alerts on failure through the scheduled August 11
+  winner announcement; this is hosting availability, not outcome monitoring.
 - A clean no-cache image build reports zero dependency vulnerabilities. The
   running image is healthy in production mode as the non-root `node` user;
   `/healthz` and `/readyz` both return 200, `.env`, `.git`, source, and tests are

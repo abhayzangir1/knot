@@ -40,7 +40,16 @@ monitor included usage in Render before deployment.
    https://YOUR-RENDER-HOST/readyz
    ```
 
-6. Measure the final signed ingress URL from the repository checkout:
+6. Create one Free UptimeRobot **HTTP(s)** monitor for the exact HTTPS
+   `/readyz` URL with the Free plan's five-minute interval. Keep it enabled
+   through the scheduled August 11, 2026 winner announcement. Configure email
+   alerts, confirm the monitor sees HTTP 200, and never include a token or other
+   secret in the URL. This external availability probe is operational hosting
+   protection, not Knot outcome/content monitoring. Render recommends an
+   external monitoring probe, but Free instances can still restart and have no
+   uptime SLA, so the monitor mitigates rather than removes that risk.
+
+7. Measure the final signed ingress URL from the repository checkout:
 
    ```powershell
    $env:KNOT_PUBLIC_SLACK_URL='https://YOUR-RENDER-HOST/slack/events'
@@ -54,15 +63,26 @@ monitor included usage in Render before deployment.
    any request reaches Slack's three-second deadline. It is a safe
    cross-workspace rejection probe and does not replace live state-changing
    interactions.
-7. In Slack app settings, set **Interactivity & Shortcuts -> Request URL** to
+8. In Slack app settings, set **Interactivity & Shortcuts -> Request URL** to
    `https://YOUR-RENDER-HOST/slack/events`. Reinstall only when manifest scopes
    or credentials changed, then verify `slack.json` against the dashboard:
    Agent experience off, Home off, Messages on and read-only, Socket Mode off,
    and exactly the four reviewed bot scopes.
-8. Execute every positive, recovery, authorization, replay, rollback, and
+9. Execute every positive, recovery, authorization, replay, rollback, and
    closure path in [SLACK_SETUP.md](SLACK_SETUP.md). Capture Slack screenshots,
    the action and compensation receipts, final audit metadata, and the absence
    of timeout banners.
+
+10. Add a calendar check for August 9, 2026. Confirm Render's displayed Free
+    PostgreSQL expiration date, UptimeRobot health, and the current winner
+    announcement schedule. The official schedule says winners are announced on
+    or around August 11, leaving only a narrow margin before a database created
+    at submission time expires. If the official announcement is delayed beyond
+    the displayed database expiry, the current Free-only design cannot promise
+    continuity: stop and make a separately tested retention decision before any
+    database replacement or deletion. Do not improvise an unverified migration
+    or claim continuity without preserved data and a successful live Slack
+    check.
 
 ## Operational checks
 

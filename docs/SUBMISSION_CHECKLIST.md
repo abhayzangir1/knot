@@ -24,6 +24,10 @@ Devpost acceptance evidence.
   limit to zero where the account supports it.
 - [ ] Wake `/readyz` to HTTP 200 immediately before Slack judging or recording;
   do not count a Free-tier cold start as acknowledgement-latency evidence.
+- [ ] Free UptimeRobot HTTPS monitor checks `/readyz` every five minutes, has an
+  alert contact, and remains enabled through the August 11 winner announcement.
+- [ ] August 9 continuity check confirms UptimeRobot health, Render database
+  expiry, included usage, spend controls, and the official announcement date.
 - [ ] Stable `/healthz`, `/readyz`, and `/slack/events` URLs are verified.
 - [ ] Stable-host acknowledgement/security probe passes and is recorded in
   [PLANS.md](../PLANS.md).
