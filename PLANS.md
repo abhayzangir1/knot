@@ -100,11 +100,20 @@ Message shortcut
   liveness; durable state uses a secret Neon Free PostgreSQL 17 Direct URL in
   the matching Ohio region. Neon has no Free-plan time limit, avoiding the
   30-day Render database expiry. This packaging adds no integration, outcome
-  type, or product surface. No live deployment is claimed until account-side
-  evidence is captured. After deployment, one secret-free five-minute external
+  type, or product surface. After deployment, one secret-free five-minute external
   `/healthz` probe keeps the judge endpoint warm until winners are actually
   announced; `/readyz` remains the database gate. This is hosting availability,
   not outcome monitoring.
+- Stable-host evidence captured on 2026-07-13: Render deployed the Free Ohio
+  service at `https://knot-1pc1.onrender.com`; `/healthz` returned HTTP 200 in
+  0.5 seconds and `/readyz` returned HTTP 200 in 1.1 seconds against the Neon
+  database. A 20-sample signed ingress probe at concurrency one recorded p50
+  312.3 ms, p95 362.9 ms, p99 365.7 ms, and maximum 365.7 ms. Unsigned, forged,
+  and stale-replay requests each returned HTTP 401. The later clean `SIGTERM`
+  is the documented Free-instance inactivity spin-down, not application-failure
+  evidence. This proves the stable receiver and negative ingress budget only;
+  the state-changing Slack flow and its role/rollback/closure gates remain
+  mandatory, so Phase 1 remains Active.
 - A clean no-cache image build reports zero dependency vulnerabilities. The
   running image is healthy in production mode as the non-root `node` user;
   `/healthz` and `/readyz` both return 200, `.env`, `.git`, source, and tests are

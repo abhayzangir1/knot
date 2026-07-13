@@ -58,8 +58,9 @@ outcome content but retains a non-sensitive audit tombstone.
 
 1. Copy `.env.example` to `.env` and enter a PostgreSQL URL, Slack signing
    secret, and bot token.
-2. Import `slack.json` in Slack and replace its placeholder interactivity URL
-   with `https://YOUR-PUBLIC-HOST/slack/events`.
+2. Import `slack.json` in Slack. The reviewed hackathon manifest points to the
+   stable receiver at `https://knot-1pc1.onrender.com/slack/events`; replace
+   that URL only when operating a different authorized deployment.
 3. Start PostgreSQL and the app:
 
    ```sh
@@ -103,17 +104,16 @@ isolated runner creates, migrates, tests, and removes a uniquely named database
 so a running Knot worker cannot consume test jobs. PostgreSQL tests that are
 skipped during the default unit run execute through `npm run test:postgres`.
 
-The checked-in Docker and Render files are a bounded way to host this same
-Phase-1 receiver at a stable TLS URL for the live Slack gate. They do not add a
-product surface, connector, outcome type, or claim of a live deployment. The
-image uses digest-pinned bases and a non-root runtime; account-side Render
-configuration and the public endpoint still require live verification. The
-Blueprint pins one Render web service to the Free instance type and accepts a
-secret Neon Free PostgreSQL URL at deployment. Neon has no Free-plan time limit,
-so delayed judging does not force a database replacement. UptimeRobot monitors
-`/healthz` every five minutes to keep the receiver warm; `/readyz` remains the
-end-to-end gate before a Slack test or judge session. These Free services still
-have usage limits and no production uptime SLA.
+The checked-in Docker and Render files host this same Phase-1 receiver at the
+stable TLS URL `https://knot-1pc1.onrender.com`. They add no product surface,
+connector, or outcome type. The image uses digest-pinned bases and a non-root
+runtime. The Blueprint pins one Render web service to the Free instance type
+and accepts a secret Neon Free PostgreSQL URL at deployment. Neon has no
+Free-plan time limit, so delayed judging does not force a database replacement.
+A UptimeRobot monitor must check `/healthz` every five minutes to keep the
+receiver warm; `/readyz` remains the end-to-end gate before a Slack test or
+judge session. These Free services still have usage limits and no production
+uptime SLA.
 
 Passing automation does not by itself complete the live Slack gate. After any
 manifest, scope, or deployment change, rerun the exact sandbox flow in
@@ -126,7 +126,7 @@ probe can measure edge-to-receiver acknowledgement latency without creating
 domain state:
 
 ```powershell
-$env:KNOT_PUBLIC_SLACK_URL='https://YOUR-PUBLIC-HOST/slack/events'
+$env:KNOT_PUBLIC_SLACK_URL='https://knot-1pc1.onrender.com/slack/events'
 $env:KNOT_ACK_CONCURRENCY='1'
 npm run measure:ack
 ```

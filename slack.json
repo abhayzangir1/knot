@@ -37,7 +37,7 @@
     "token_rotation_enabled": false,
     "interactivity": {
       "is_enabled": true,
-      "request_url": "https://knot.example.com/slack/events"
+      "request_url": "https://knot-1pc1.onrender.com/slack/events"
     }
   }
 }

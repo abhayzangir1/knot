@@ -2,12 +2,11 @@
 
 ## Import the manifest
 
-Create a Slack app from [slack.json](../slack.json). Before saving it, replace
-the placeholder interactivity request URL with the public TLS URL of this
-service:
+Create or update the Slack app from [slack.json](../slack.json). The reviewed
+hackathon manifest uses this stable public TLS receiver:
 
 ```text
-https://YOUR-PUBLIC-HOST/slack/events
+https://knot-1pc1.onrender.com/slack/events
 ```
 
 The manifest intentionally requests only the scopes used by the skeleton:
@@ -21,8 +20,10 @@ reject Slackbot, app users, deleted members, and identity mismatches in
 accountable roles; it does not request email access. Knot does not create,
 invite people to, archive, or delete outcome channels.
 
-Install or reinstall the app after changing scopes or the request URL, then put
-the generated signing secret and bot token in `.env`.
+Install or reinstall the app after changing scopes. A request-URL-only change
+does not grant a new scope, but it must still be saved and tested. Put the
+generated signing secret and bot token only in approved secret stores such as
+local `.env` and the Render environment.
 
 The Phase-1 manifest deliberately has token rotation disabled because this
 receiver supports one controlled developer-workspace installation and no OAuth

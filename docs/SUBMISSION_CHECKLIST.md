@@ -20,7 +20,7 @@ Devpost acceptance evidence.
   [SVG](architecture.svg) and [PNG](architecture.png).
 - [ ] Neon Free PostgreSQL 17 project exists in Ohio with no sample data;
   Direct TLS connection succeeds and Free usage limits are visible.
-- [ ] Render Blueprint creates exactly one Free Ohio web service and no
+- [x] Render Blueprint creates exactly one Free Ohio web service and no
   Render database or paid instance.
 - [ ] Render billing shows no unintended paid resource; set the workspace spend
   limit to zero where the account supports it.
@@ -30,8 +30,10 @@ Devpost acceptance evidence.
   an alert contact, and remains enabled until winners are actually announced.
 - [ ] Daily continuity check confirms UptimeRobot health, `/readyz`, Render and
   Neon included usage, spend controls, and the official announcement status.
-- [ ] Stable `/healthz`, `/readyz`, and `/slack/events` URLs are verified.
-- [ ] Stable-host acknowledgement/security probe passes and is recorded in
+- [x] Stable `/healthz`, `/readyz`, and signed `/slack/events` ingress are
+  verified. A browser `GET` to `/slack/events` is intentionally not an app
+  health check because Slack uses signed `POST` requests.
+- [x] Stable-host acknowledgement/security probe passes and is recorded in
   [PLANS.md](../PLANS.md).
 - [ ] Slack dashboard matches the reviewed manifest and points to the stable
   receiver.
