@@ -53,8 +53,10 @@ Devpost acceptance evidence.
 
 ## Judge access and submission
 
-- [ ] Invite `slackhack@salesforce.com` to the Slack developer sandbox.
-- [ ] Invite `testing@devpost.com` to the Slack developer sandbox.
+- [x] Invitation sent to `slackhack@salesforce.com` for the Slack developer
+  sandbox; acceptance remains to be confirmed.
+- [x] Invitation sent to `testing@devpost.com` for the Slack developer sandbox;
+  acceptance remains to be confirmed.
 - [ ] Confirm both invitations or memberships from the sandbox admin view.
 - [ ] Record the exact developer-sandbox URL without including credentials.
 - [ ] Record a comprehensive English demo under three minutes that shows the

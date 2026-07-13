@@ -1,9 +1,44 @@
 import { describe, expect, it } from "vitest";
 
-import { duplicateIngressFeedback, statusProjectionReceipt } from "../../src/slack/app.js";
+import {
+  duplicateIngressFeedback,
+  slackCardSnapshotFromMessage,
+  statusProjectionReceipt,
+} from "../../src/slack/app.js";
 import { InMemorySlackIngressReceiptStore } from "../../src/slack/ingress-receipts.js";
 
 describe("Slack ingress receipts", () => {
+  it("captures Slack's normalized live card state without changing its audience binding", () => {
+    const snapshot = slackCardSnapshotFromMessage(
+      {
+        channelId: "D123",
+        messageTs: "1710000000.000100",
+        audience: { kind: "personal", principalIds: ["principal-1"] },
+        blocks: [{ type: "section", text: { type: "plain_text", text: "Before" } }],
+        fallbackText: "Before",
+      },
+      {
+        ts: "1710000000.000100",
+        text: "Normalized fallback",
+        blocks: [
+          {
+            type: "section",
+            block_id: "normalized",
+            text: { type: "mrkdwn", text: "*Before*" },
+          },
+        ],
+      },
+    );
+
+    expect(snapshot).toMatchObject({
+      channelId: "D123",
+      messageTs: "1710000000.000100",
+      audience: { kind: "personal", principalIds: ["principal-1"] },
+      fallbackText: "Normalized fallback",
+      blocks: [{ block_id: "normalized" }],
+    });
+  });
+
   it("deduplicates a retry without conflating deliveries from different workspaces", async () => {
     const store = new InMemorySlackIngressReceiptStore();
     const receipt = {

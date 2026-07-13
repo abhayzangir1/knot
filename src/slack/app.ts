@@ -30,6 +30,7 @@ import type {
   OutcomeService,
   SlackCardUpdateAction,
 } from "../services/outcome-service.js";
+import type { SlackCardReference } from "../services/outcome-store.js";
 import {
   buildActionReviewCard,
   buildClosureSummaryCard,
@@ -328,6 +329,59 @@ function slackMessageVersion(message: Record<string, unknown>): string | undefin
     text: text ?? "",
     blocks: Array.isArray(message.blocks) ? message.blocks : [],
   });
+}
+
+export function slackCardSnapshotFromMessage(
+  card: SlackCardReference,
+  message: Record<string, unknown>,
+): SlackCardReference {
+  const messageTs = readString(message.ts);
+  if (messageTs !== card.messageTs) {
+    throw new OutcomeDomainError(
+      "slack_card_snapshot_mismatch",
+      "Slack returned a different app-owned card than the one Knot requested.",
+    );
+  }
+  const fallbackText = readString(message.text) ?? "";
+  const blocks = Array.isArray(message.blocks)
+    ? message.blocks.filter(
+        (block): block is Record<string, unknown> => block !== null && typeof block === "object",
+      )
+    : [];
+  if (!fallbackText && blocks.length === 0) {
+    throw new OutcomeDomainError(
+      "slack_card_snapshot_missing",
+      "Slack did not return the current app-owned outcome card.",
+    );
+  }
+  return { ...card, blocks, fallbackText };
+}
+
+async function readLiveSlackCardSnapshot(
+  client: WebClient,
+  card: SlackCardReference,
+): Promise<SlackCardReference> {
+  const response = record(
+    await client.conversations.replies({
+      channel: card.channelId,
+      ts: card.messageTs,
+      oldest: card.messageTs,
+      latest: card.messageTs,
+      inclusive: true,
+      limit: 1,
+    }),
+  );
+  const messages = Array.isArray(response.messages) ? response.messages : [];
+  const message = messages
+    .map(record)
+    .find((candidate) => readString(candidate.ts) === card.messageTs);
+  if (!message) {
+    throw new OutcomeDomainError(
+      "slack_card_snapshot_missing",
+      "Slack did not return the current app-owned outcome card.",
+    );
+  }
+  return slackCardSnapshotFromMessage(card, message);
 }
 
 function closureEvidenceKind(type: OutcomeType): EvidenceReference["kind"] {
@@ -2049,6 +2103,8 @@ async function processDurableSlackCommand(
       case "action_preview": {
         const outcome = await runtime.outcomeService.getOutcome(command.outcomeId, actor);
         const assessment = await runtime.outcomeService.getAssessment(outcome.id, actor);
+        const storedCard = await runtime.outcomeService.getSlackCardReference(outcome.id, actor);
+        const liveBeforeCard = await readLiveSlackCardSnapshot(client, storedCard);
         const ownerPrincipalId = outcome.contract.accountableOwnerPrincipalId ?? actor.principalId;
         const ownerSlackUserId = await runtime.identities.slackUserIdForPrincipal(
           outcome.workspaceId,
@@ -2086,6 +2142,7 @@ async function processDurableSlackCommand(
             actionPlanId: deterministicCommandUuid({ kind: "action-preview-plan", jobId: job.id }),
             idempotencyKey: `slack-job:${job.id}:action-preview`,
           },
+          liveBeforeCard,
         );
         const preview = actionPreviewDetails(plan);
         const reviewerPrincipalId =

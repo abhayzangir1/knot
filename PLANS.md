@@ -75,6 +75,15 @@ Message shortcut
 - Repeated **Check status** clicks are coalesced by workspace, actor, outcome,
   and deterministic status projection. An unchanged state produces no stacked
   private message; a changed state remains eligible for one fresh projection.
+- A 2026-07-14 stable-host shared-outcome run reached the immutable-plan gate:
+  the named next-move actor prepared a real app-owned-card update, received the
+  durable acceptance receipt, and the independent reviewer received **Review
+  exact update** with the bound target, plan hash, and expiry. The displayed
+  plan was approved, but execution exposed a false stale-state conflict because
+  Slack had normalized the originally posted Block Kit payload. D-058 now binds
+  the immutable plan to Slack's verified live normalized before-state while
+  preserving the post-preview stale-state guard. This is partial evidence only;
+  successful execution receipt, rollback, closure, and reopen remain unpassed.
 - The configured bot token is bound at startup to the exact `team_id` returned
   by Slack `auth.test`. Every signed interaction must match that installation
   before it can enqueue work. Retried app DMs reconcile an opaque metadata
@@ -147,9 +156,10 @@ Message shortcut
   only the creator can delete private outcome content; and only the canonical
   owner closure card can reopen and stale the former closure evidence. Role
   cards do not expose another person's action.
-- Current automated evidence after the recovery, authorization, packaging, and
-  D-054/D-055 regression pass: the default release run passes 172 tests with
-  five PostgreSQL-gated tests skipped (177 total). The last isolated
+- Current automated evidence after the recovery, authorization, packaging,
+  D-054/D-055, status-coalescing, and D-058 regression passes: the default
+  release run passes 176 tests with five PostgreSQL-gated tests skipped (181
+  total). The last isolated
   PostgreSQL run, before D-054/D-055, passed all then-existing 170 tests; the
   isolated suite must be rerun against a disposable PostgreSQL database before
   this gate can close. Formatter, linter,

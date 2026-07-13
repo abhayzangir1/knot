@@ -571,6 +571,67 @@ describe("OutcomeService walking skeleton", () => {
     );
   });
 
+  it("binds an action preview to Slack's live normalized card snapshot", async () => {
+    const store = new InMemoryOutcomeStore();
+    const service = new OutcomeService(store);
+    const active = await createActiveSharedOutcome(service);
+    const liveBeforeCard: SlackCardReference = {
+      channelId: "Downer",
+      messageTs: "1710000000.000100",
+      audience: { kind: "personal", principalIds: ["owner-1"] },
+      blocks: [
+        {
+          type: "section",
+          block_id: "slack-normalized-block",
+          text: { type: "mrkdwn", text: "*Before*" },
+        },
+      ],
+      fallbackText: "Slack normalized before state",
+    };
+
+    const plan = await service.previewSlackCardUpdate(
+      active.id,
+      actor("owner-1"),
+      timestamp,
+      [{ type: "section", text: { type: "plain_text", text: "After" } }],
+      "After",
+      undefined,
+      liveBeforeCard,
+    );
+
+    expect(plan.proposedActions[0]).toMatchObject({
+      kind: "slack.card.update",
+      beforeBlocks: liveBeforeCard.blocks,
+      beforeFallbackText: liveBeforeCard.fallbackText,
+    });
+    await expect(service.getSlackCardReference(active.id, actor("owner-1"))).resolves.toMatchObject(
+      liveBeforeCard,
+    );
+  });
+
+  it("rejects a live preview snapshot that changes the card identity or audience", async () => {
+    const service = new OutcomeService(new InMemoryOutcomeStore());
+    const active = await createActiveSharedOutcome(service);
+
+    await expect(
+      service.previewSlackCardUpdate(
+        active.id,
+        actor("owner-1"),
+        timestamp,
+        [{ type: "section", text: { type: "plain_text", text: "After" } }],
+        "After",
+        undefined,
+        {
+          channelId: "Dother",
+          messageTs: "1710000000.000100",
+          audience: { kind: "personal", principalIds: ["owner-1"] },
+          blocks: [],
+          fallbackText: "Different card",
+        },
+      ),
+    ).rejects.toMatchObject({ code: "action_preview_card_mismatch" });
+  });
+
   it("allows a private, single-message outcome to self-confirm its reversible update", async () => {
     const service = new OutcomeService(new InMemoryOutcomeStore());
     const privateContract: OutcomeContract = {

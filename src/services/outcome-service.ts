@@ -703,6 +703,7 @@ export class OutcomeService {
     afterBlocks: readonly Record<string, unknown>[],
     afterFallbackText: string,
     binding?: ActionPlanBinding,
+    liveBeforeCard?: SlackCardReference,
   ): Promise<ActionPlan> {
     return this.store.transaction(async () => {
       const outcome = await this.requireOutcome(outcomeId, actor.workspaceId);
@@ -733,7 +734,13 @@ export class OutcomeService {
         );
       }
       this.assertActorOwnsCurrentNextMove(outcome, actor, at);
-      const card = await this.requireCard(outcomeId, actor.workspaceId);
+      const storedCard = await this.requireCard(outcomeId, actor.workspaceId);
+      const card = liveBeforeCard
+        ? this.validateLiveCardSnapshot(storedCard, liveBeforeCard)
+        : storedCard;
+      if (liveBeforeCard) {
+        await this.store.setSlackCardReference(outcomeId, actor.workspaceId, card);
+      }
 
       const action: SlackCardUpdateAction = {
         kind: "slack.card.update",
@@ -1514,6 +1521,30 @@ export class OutcomeService {
       );
     }
     return card;
+  }
+
+  private validateLiveCardSnapshot(
+    storedCard: SlackCardReference,
+    liveCard: SlackCardReference,
+  ): SlackCardReference {
+    const storedPrincipals = [...storedCard.audience.principalIds].sort();
+    const livePrincipals = [...liveCard.audience.principalIds].sort();
+    if (
+      liveCard.channelId !== storedCard.channelId ||
+      liveCard.messageTs !== storedCard.messageTs ||
+      liveCard.audience.kind !== storedCard.audience.kind ||
+      JSON.stringify(livePrincipals) !== JSON.stringify(storedPrincipals)
+    ) {
+      throw new OutcomeDomainError(
+        "action_preview_card_mismatch",
+        "The live Slack card does not match the outcome and audience selected for this update.",
+      );
+    }
+    return {
+      ...storedCard,
+      blocks: liveCard.blocks,
+      fallbackText: liveCard.fallbackText,
+    };
   }
 
   private asSlackCardUpdate(plan: ActionPlan): SlackCardUpdateAction {
