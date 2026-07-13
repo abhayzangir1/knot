@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { OUTCOME_CONTRACT_FIELDS } from "../../src/outcomes/index.js";
 import {
+  contractSubmissionBinding,
   deterministicCommandUuid,
   durableCommandDedupeKey,
   durableSlackIdentity,
@@ -229,5 +230,18 @@ describe("durable Slack command boundary", () => {
       }),
     ).not.toBe(first);
     expect(durableCommandDedupeKey({ ...base, nonce: "1710000000.000200" })).not.toBe(first);
+  });
+
+  it("binds repeated submissions of one contract preview to one outcome and dedupe key", () => {
+    const opaqueReference = randomUUID();
+    const first = contractSubmissionBinding({ identity, opaqueReference });
+    const repeated = contractSubmissionBinding({ identity, opaqueReference });
+
+    expect(first).toEqual(repeated);
+    expect(first.dedupeNonce).toBe("once");
+    expect(first.intendedOutcomeId).toMatch(/^[0-9a-f-]{36}$/u);
+    expect(
+      contractSubmissionBinding({ identity, opaqueReference: randomUUID() }).intendedOutcomeId,
+    ).not.toBe(first.intendedOutcomeId);
   });
 });

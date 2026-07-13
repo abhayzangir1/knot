@@ -56,6 +56,7 @@ import {
   submissionErrors,
 } from "./contract-input.js";
 import {
+  contractSubmissionBinding,
   deterministicCommandUuid,
   durableCommandDedupeKey,
   durableSlackIdentity,
@@ -2555,13 +2556,22 @@ export function createKnotSlackApp(runtime: SlackRuntime): {
     }
     let durablyQueued = false;
     try {
-      await enqueueDurableSlackCommand(runtime, identity, "contract", opaqueReference, rawBody, {
-        kind: "contract_create",
+      const binding = contractSubmissionBinding({ identity, opaqueReference });
+      await enqueueDurableSlackCommand(
+        runtime,
         identity,
+        "contract",
         opaqueReference,
-        intendedOutcomeId: durableCommandStableUuid("contract", identity, opaqueReference, rawBody),
-        submission: serializeContractSubmission(rawSubmission),
-      });
+        rawBody,
+        {
+          kind: "contract_create",
+          identity,
+          opaqueReference,
+          intendedOutcomeId: binding.intendedOutcomeId,
+          submission: serializeContractSubmission(rawSubmission),
+        },
+        { dedupeNonce: binding.dedupeNonce },
+      );
       durablyQueued = true;
       await ack();
       runtime.jobs.wake();

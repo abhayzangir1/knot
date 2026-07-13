@@ -2,6 +2,14 @@ import { randomUUID } from "node:crypto";
 
 import type { ActorContext } from "../outcomes/index.js";
 
+/**
+ * A careful Outcome Contract review can take longer than a short interaction.
+ * The reference remains actor-bound, single-use, and contains no source text in
+ * the durable store, so one hour preserves review usability without granting
+ * authority or creating an indefinitely reusable capability.
+ */
+export const SHORTCUT_CONTEXT_TTL_MILLISECONDS = 60 * 60 * 1000;
+
 export type ShortcutContext = {
   reference: string;
   creator: Pick<ActorContext, "workspaceId" | "principalId">;
@@ -37,7 +45,7 @@ export class InMemoryInteractionContextStore implements InteractionContextStore 
 
   public async create(
     input: CreateShortcutContextInput,
-    ttlMilliseconds = 10 * 60 * 1000,
+    ttlMilliseconds = SHORTCUT_CONTEXT_TTL_MILLISECONDS,
   ): Promise<ShortcutContext> {
     this.prune();
     const context: ShortcutContext = {

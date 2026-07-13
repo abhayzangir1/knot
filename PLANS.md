@@ -120,14 +120,22 @@ Message shortcut
   HTTP 200 from both `/healthz` and `/readyz`. No reinstall was required because
   this dashboard change added no OAuth scope. The live state-changing flow is
   the next gate.
+- The first stable-host creation attempt exposed two release blockers: the
+  actor-bound preview expired after ten minutes during careful human review,
+  and two submissions of that modal queued different `contract_create` jobs.
+  D-054 extends the single-use context to one hour and binds every submission
+  of the same tenant/actor/reference to one durable command and deterministic
+  outcome ID. D-055 also makes the live database's current strict TLS semantics
+  explicit as `verify-full`. Automated regression evidence must pass and the
+  complete live flow must be restarted; this failed attempt is not acceptance
+  evidence and Phase 1 remains Active.
 - A clean no-cache image build reports zero dependency vulnerabilities. The
   running image is healthy in production mode as the non-root `node` user;
   `/healthz` and `/readyz` both return 200, `.env`, `.git`, source, and tests are
   absent, two simultaneous fresh-database migrators succeed, six migrations
-  are recorded, and forced RLS is present on all 15 public data tables. A fresh
-  temporary HTTPS tunnel also returns 200 for both endpoints, but Slack's
-  dashboard request URL and the complete interaction trace still require live
-  verification and are not treated as stable deployment evidence.
+  are recorded, and forced RLS is present on all 15 public data tables. The
+  stable deployment and dashboard URL are verified above; the complete
+  interaction trace remains mandatory.
 - Completed the negative-path recovery surface beside tested services. Owner
   decline now returns a private creator card with **Reassign owner** and
   **Cancel outcome**. Correction reconfirms every contract field and replaces
@@ -135,10 +143,12 @@ Message shortcut
   only the creator can delete private outcome content; and only the canonical
   owner closure card can reopen and stale the former closure evidence. Role
   cards do not expose another person's action.
-- Current automated evidence after the recovery, authorization, and packaging
-  pass: the default release run passes 165 tests with five PostgreSQL-gated
-  tests skipped; the isolated PostgreSQL run passes all 170 tests in 20 files.
-  Formatter, linter,
+- Current automated evidence after the recovery, authorization, packaging, and
+  D-054/D-055 regression pass: the default release run passes 172 tests with
+  five PostgreSQL-gated tests skipped (177 total). The last isolated
+  PostgreSQL run, before D-054/D-055, passed all then-existing 170 tests; the
+  isolated suite must be rerun against a disposable PostgreSQL database before
+  this gate can close. Formatter, linter,
   typecheck, build, production and full dependency audits, non-root container
   inspection, local readiness, and the temporary public `/readyz` endpoint all
   pass. The live end-to-end Slack interaction trace is still required and Phase

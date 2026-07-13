@@ -8,6 +8,7 @@ import type {
   InteractionContextStore,
   ShortcutContext,
 } from "../slack/interaction-context.js";
+import { SHORTCUT_CONTEXT_TTL_MILLISECONDS } from "../slack/interaction-context.js";
 
 type ContextRow = {
   reference: string;
@@ -49,7 +50,7 @@ export class PostgresInteractionContextStore implements InteractionContextStore 
 
   public async create(
     input: CreateShortcutContextInput,
-    ttlMilliseconds = 10 * 60 * 1000,
+    ttlMilliseconds = SHORTCUT_CONTEXT_TTL_MILLISECONDS,
   ): Promise<ShortcutContext> {
     const reference = input.reference ?? randomUUID();
     const expiresAt = new Date(Date.now() + ttlMilliseconds).toISOString();

@@ -185,6 +185,25 @@ export function durableCommandDedupeKey(input: {
   return `${input.label}:${input.identity.slackTeamId}:${input.identity.slackUserId}:${input.opaqueReference}:${input.nonce}`;
 }
 
+/**
+ * One modal preview may create at most one outcome. Slack can deliver another
+ * view submission with a different view hash after a repeated click, so the
+ * binding deliberately excludes delivery-specific fields.
+ */
+export function contractSubmissionBinding(input: {
+  identity: Pick<VerifiedSlackIdentity, "slackTeamId" | "slackUserId">;
+  opaqueReference: string;
+}): { dedupeNonce: "once"; intendedOutcomeId: string } {
+  const dedupeNonce = "once" as const;
+  const key = durableCommandDedupeKey({
+    label: "contract",
+    identity: input.identity,
+    opaqueReference: input.opaqueReference,
+    nonce: dedupeNonce,
+  });
+  return { dedupeNonce, intendedOutcomeId: deterministicCommandUuid(key) };
+}
+
 /** Produces an RFC-4122 UUID that is stable for one already-deduplicated command. */
 export function deterministicCommandUuid(seed: unknown): string {
   const hash = hashExternalState(seed);
