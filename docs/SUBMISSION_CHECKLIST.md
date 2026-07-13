@@ -35,7 +35,7 @@ Devpost acceptance evidence.
   health check because Slack uses signed `POST` requests.
 - [x] Stable-host acknowledgement/security probe passes and is recorded in
   [PLANS.md](../PLANS.md).
-- [ ] Slack dashboard matches the reviewed manifest and points to the stable
+- [x] Slack dashboard matches the reviewed manifest and points to the stable
   receiver.
 - [ ] Shared-outcome positive path passes from shortcut through receipt,
   rollback, owner-attested closure, and reopen.

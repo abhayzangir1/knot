@@ -114,6 +114,12 @@ Message shortcut
   evidence. This proves the stable receiver and negative ingress budget only;
   the state-changing Slack flow and its role/rollback/closure gates remain
   mandatory, so Phase 1 remains Active.
+- Slack dashboard evidence captured on 2026-07-13 shows Interactivity enabled
+  and its saved Request URL matching the reviewed manifest exactly:
+  `https://knot-1pc1.onrender.com/slack/events`. A subsequent wake returned
+  HTTP 200 from both `/healthz` and `/readyz`. No reinstall was required because
+  this dashboard change added no OAuth scope. The live state-changing flow is
+  the next gate.
 - A clean no-cache image build reports zero dependency vulnerabilities. The
   running image is healthy in production mode as the non-root `node` user;
   `/healthz` and `/readyz` both return 200, `.env`, `.git`, source, and tests are
