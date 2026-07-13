@@ -26,6 +26,7 @@ import {
 } from "../outcomes/index.js";
 import type {
   ActionExecutor,
+  OutcomeAssessment,
   OutcomeService,
   SlackCardUpdateAction,
 } from "../services/outcome-service.js";
@@ -64,7 +65,7 @@ import {
   type SlackDurableCommand,
   serializeContractSubmission,
 } from "./durable-commands.js";
-import type { SlackIngressReceiptStore } from "./ingress-receipts.js";
+import type { SlackIngressReceipt, SlackIngressReceiptStore } from "./ingress-receipts.js";
 import type { InteractionContextStore } from "./interaction-context.js";
 import { parseOpaqueReference } from "./interaction-context.js";
 import {
@@ -285,15 +286,33 @@ function userFacingError(error: unknown, fallback: string): string {
   return fallback;
 }
 
-export function duplicateIngressFeedback(surface: "shortcut" | "status" | "exact_review"): string {
+export function duplicateIngressFeedback(surface: "shortcut" | "exact_review"): string {
   switch (surface) {
     case "shortcut":
       return "Slack retried this shortcut. Knot did not create a duplicate outcome; continue in the original preview or start again from the message.";
-    case "status":
-      return "Slack retried this status request. Knot did not run a duplicate check; the original request is already processing or complete.";
     case "exact_review":
       return "Slack retried this exact-review request. Knot did not create a duplicate approval; continue in the original preview or reopen it from the current card.";
   }
+}
+
+export function statusProjectionReceipt(
+  identity: Pick<VerifiedSlackIdentity, "slackTeamId" | "slackUserId">,
+  outcomeId: string,
+  assessment: OutcomeAssessment,
+): SlackIngressReceipt {
+  const projection = {
+    outcomeId,
+    slackUserId: identity.slackUserId,
+    state: assessment.state,
+    reason: assessment.reason,
+    nextMove: assessment.nextMove,
+    evidenceStatus: assessment.evidenceStatus,
+  };
+  return {
+    deliveryKey: `outcome-check:${identity.slackTeamId}:${identity.slackUserId}:${outcomeId}:${hashExternalState(projection)}`,
+    workspaceSlackTeamId: identity.slackTeamId,
+    payload: projection,
+  };
 }
 
 function asSlackBlocks(blocks: readonly Record<string, unknown>[]): never {
@@ -3222,12 +3241,13 @@ export function createKnotSlackApp(runtime: SlackRuntime): {
     await ack();
     backgroundTasks.run(runtime.logger, "check-outcome", async () => {
       try {
-        if (!(await claimSlackIngress(runtime, "outcome-check", identity, outcomeId, rawBody))) {
-          await postInteractionEphemeral(client, rawBody, duplicateIngressFeedback("status"));
-          return;
-        }
         const actor = await runtime.identities.resolve(identity);
         const assessment = await runtime.outcomeService.getAssessment(outcomeId, actor);
+        if (
+          !(await runtime.ingress.claim(statusProjectionReceipt(identity, outcomeId, assessment)))
+        ) {
+          return;
+        }
         await postInteractionEphemeral(
           client,
           rawBody,

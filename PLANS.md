@@ -72,6 +72,9 @@ Message shortcut
   domain writes, Slack calls, and model/connector work occur only in the worker.
   Payload hashes reject dedupe-key collisions; stale leases recover after a
   crash; completed and terminal payloads are redacted.
+- Repeated **Check status** clicks are coalesced by workspace, actor, outcome,
+  and deterministic status projection. An unchanged state produces no stacked
+  private message; a changed state remains eligible for one fresh projection.
 - The configured bot token is bound at startup to the exact `team_id` returned
   by Slack `auth.test`. Every signed interaction must match that installation
   before it can enqueue work. Retried app DMs reconcile an opaque metadata

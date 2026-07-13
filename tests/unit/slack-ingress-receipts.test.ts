@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { duplicateIngressFeedback } from "../../src/slack/app.js";
+import { duplicateIngressFeedback, statusProjectionReceipt } from "../../src/slack/app.js";
 import { InMemorySlackIngressReceiptStore } from "../../src/slack/ingress-receipts.js";
 
 describe("Slack ingress receipts", () => {
@@ -33,9 +33,30 @@ describe("Slack ingress receipts", () => {
 
   it("terminates duplicate preparing surfaces with explicit no-duplicate feedback", () => {
     expect(duplicateIngressFeedback("shortcut")).toContain("did not create a duplicate outcome");
-    expect(duplicateIngressFeedback("status")).toContain("did not run a duplicate check");
     expect(duplicateIngressFeedback("exact_review")).toContain(
       "did not create a duplicate approval",
     );
+  });
+
+  it("coalesces repeated unchanged status projections but permits a changed status", async () => {
+    const store = new InMemorySlackIngressReceiptStore();
+    const identity = { slackTeamId: "T1", slackUserId: "U1" };
+    const active = statusProjectionReceipt(identity, "outcome-1", {
+      state: "active",
+      reason: "The contract is active.",
+      nextMove: "Prepare the update.",
+      evidenceStatus: "missing",
+    });
+    const closed = statusProjectionReceipt(identity, "outcome-1", {
+      state: "closed",
+      reason: "The owner supplied closure evidence.",
+      nextMove: "No further action is required.",
+      evidenceStatus: "available",
+    });
+
+    await expect(store.claim(active)).resolves.toBe(true);
+    await expect(store.claim(active)).resolves.toBe(false);
+    await expect(store.claim(closed)).resolves.toBe(true);
+    expect(closed.deliveryKey).not.toBe(active.deliveryKey);
   });
 });
