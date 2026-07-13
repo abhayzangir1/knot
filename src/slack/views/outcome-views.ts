@@ -30,7 +30,10 @@ function sourceEvidenceLink(permalink: string): string {
 
 function reviewPointDefaults(
   reviewPoint: string,
-): { kind: "at"; initialDateTime: number } | { kind: "on_event"; event: string } {
+): { kind: "at"; initialDateTime: number } | { kind: "on_event"; event: string } | undefined {
+  if (!reviewPoint.trim()) {
+    return undefined;
+  }
   const parsed = Date.parse(reviewPoint);
   if (!Number.isNaN(parsed)) {
     return { kind: "at", initialDateTime: Math.floor(parsed / 1_000) };
@@ -359,7 +362,9 @@ export function buildContractPreviewModal(defaults: ContractPreviewDefaults): Sl
           type: "plain_text_input",
           action_id: "value",
           multiline: true,
-          initial_value: boundedPlainText(defaults.definitionOfDone, 2_000),
+          ...(defaults.definitionOfDone
+            ? { initial_value: boundedPlainText(defaults.definitionOfDone, 2_000) }
+            : {}),
           min_length: 1,
           max_length: 2000,
         },
@@ -371,7 +376,9 @@ export function buildContractPreviewModal(defaults: ContractPreviewDefaults): Sl
         element: {
           type: "plain_text_input",
           action_id: "value",
-          initial_value: boundedPlainText(defaults.nextMove, 1_000),
+          ...(defaults.nextMove
+            ? { initial_value: boundedPlainText(defaults.nextMove, 1_000) }
+            : {}),
           min_length: 1,
           max_length: 1000,
         },
@@ -421,7 +428,13 @@ export function buildContractPreviewModal(defaults: ContractPreviewDefaults): Sl
         element: {
           type: "static_select",
           action_id: "value",
-          initial_option: reviewPointOptions.find((option) => option.value === reviewPoint.kind),
+          ...(reviewPoint
+            ? {
+                initial_option: reviewPointOptions.find(
+                  (option) => option.value === reviewPoint.kind,
+                ),
+              }
+            : {}),
           options: reviewPointOptions,
         },
       },
@@ -437,7 +450,7 @@ export function buildContractPreviewModal(defaults: ContractPreviewDefaults): Sl
         element: {
           type: "datetimepicker",
           action_id: "value",
-          ...(reviewPoint.kind === "at" ? { initial_date_time: reviewPoint.initialDateTime } : {}),
+          ...(reviewPoint?.kind === "at" ? { initial_date_time: reviewPoint.initialDateTime } : {}),
         },
       },
       {
@@ -452,7 +465,9 @@ export function buildContractPreviewModal(defaults: ContractPreviewDefaults): Sl
         element: {
           type: "plain_text_input",
           action_id: "value",
-          ...(reviewPoint.kind === "on_event" ? { initial_value: reviewPoint.event } : {}),
+          ...(reviewPoint?.kind === "on_event" && reviewPoint.event
+            ? { initial_value: reviewPoint.event }
+            : {}),
           min_length: 1,
           max_length: 500,
         },

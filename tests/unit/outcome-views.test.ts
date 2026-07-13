@@ -29,6 +29,29 @@ const actionPreviewInput = {
 };
 
 describe("Outcome contract modal", () => {
+  it("does not fabricate completion, next-move, or review values for a selected message", () => {
+    const view = buildContractPreviewModal({
+      opaqueReference: "00000000-0000-4000-8000-000000000001",
+      creatorSlackUserId: "UCREATOR",
+      goal: "Publish the demo",
+      definitionOfDone: "",
+      nextMove: "",
+      reviewPoint: "",
+      sourceEvidencePermalink: "https://example.slack.com/archives/C1/p1710000000000100",
+    });
+    const blocks = view.blocks as Record<string, unknown>[];
+    for (const blockId of [
+      slackIds.blocks.definition,
+      slackIds.blocks.nextMove,
+      contractInputBlockIds.reviewPointEvent,
+    ]) {
+      const block = blocks.find((candidate) => candidate.block_id === blockId);
+      expect(block?.element as Record<string, unknown>).not.toHaveProperty("initial_value");
+    }
+    const reviewPoint = blocks.find((block) => block.block_id === slackIds.blocks.reviewPoint);
+    expect(reviewPoint?.element as Record<string, unknown>).not.toHaveProperty("initial_option");
+  });
+
   it("defaults a selected message to the least-privilege single-person flow", () => {
     const view = buildContractPreviewModal({
       opaqueReference: "00000000-0000-4000-8000-000000000001",

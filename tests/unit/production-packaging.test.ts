@@ -19,21 +19,23 @@ describe("production packaging boundary", () => {
     expect(dockerfile).not.toMatch(/COPY\s+\.env/iu);
   });
 
-  it("keeps Render free, secrets account-side, and requires managed readiness", async () => {
+  it("keeps Render free, keeps all deployment credentials account-side, and uses liveness", async () => {
     const blueprint = await repositoryFile("render.yaml");
 
     expect(blueprint).toContain(
       "# yaml-language-server: $schema=https://render.com/schema/render.yaml.json",
     );
-    expect(blueprint).toContain("healthCheckPath: /readyz");
-    expect(blueprint).toContain("fromDatabase:");
-    expect(blueprint).toContain('postgresMajorVersion: "17"');
-    expect(blueprint).toContain("ipAllowList: []");
-    expect(blueprint.match(/sync: false/gu)).toHaveLength(2);
-    expect(blueprint.match(/^\s+plan: free$/gmu)).toHaveLength(2);
+    expect(blueprint).toContain("region: oregon");
+    expect(blueprint).toContain("healthCheckPath: /healthz");
+    expect(blueprint).not.toContain("healthCheckPath: /readyz");
+    expect(blueprint).not.toContain("fromDatabase:");
+    expect(blueprint).not.toMatch(/^databases:/mu);
+    expect(blueprint.match(/sync: false/gu)).toHaveLength(3);
+    expect(blueprint.match(/^\s+plan: free$/gmu)).toHaveLength(1);
     expect(blueprint).not.toMatch(/^\s+plan: (?:starter|basic-|standard|pro)/gmu);
     expect(blueprint).not.toContain("maxShutdownDelaySeconds");
     expect(blueprint).not.toMatch(/xox[baprs]-/iu);
+    expect(blueprint).not.toMatch(/postgres(?:ql)?:\/\//iu);
   });
 
   it("binds local database and receiver ports to loopback", async () => {

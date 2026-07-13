@@ -245,19 +245,18 @@ export function shortcutSource(shortcut: SlackPayload): {
   };
 }
 
-function candidateDefaults(text: string): {
+function sourceGroundedDraft(text: string): {
   goal: string;
   definitionOfDone: string;
   nextMove: string;
   reviewPoint: string;
 } {
   const clipped = text.trim().replaceAll(/\s+/g, " ").slice(0, 180);
-  const reviewAt = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString();
   return {
-    goal: clipped || "Resolve the selected Slack message.",
-    definitionOfDone: "The stated result is completed with an accessible supporting reference.",
-    nextMove: "Post the first verifiable progress update toward this result.",
-    reviewPoint: reviewAt,
+    goal: clipped,
+    definitionOfDone: "",
+    nextMove: "",
+    reviewPoint: "",
   };
 }
 
@@ -2501,7 +2500,7 @@ export function createKnotSlackApp(runtime: SlackRuntime): {
             opaqueReference: context.reference,
             creatorSlackUserId: actor.slackUserId,
             sourceEvidencePermalink: context.source.permalink,
-            ...candidateDefaults(source.text),
+            ...sourceGroundedDraft(source.text),
           }) as never,
         });
       } catch (error) {

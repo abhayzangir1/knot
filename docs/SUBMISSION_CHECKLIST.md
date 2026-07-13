@@ -18,16 +18,18 @@ Devpost acceptance evidence.
   and meets the acknowledgement budget through the temporary test tunnel.
 - [x] Judge-ready architecture diagram exists as
   [SVG](architecture.svg) and [PNG](architecture.png).
-- [ ] Render Blueprint creates one Free web service and one Free PostgreSQL
-  database, with no paid instance selected.
+- [ ] Neon Free PostgreSQL 17 project exists in Oregon with no sample data;
+  Direct TLS connection succeeds and Free usage limits are visible.
+- [ ] Render Blueprint creates exactly one Free Oregon web service and no
+  Render database or paid instance.
 - [ ] Render billing shows no unintended paid resource; set the workspace spend
   limit to zero where the account supports it.
 - [ ] Wake `/readyz` to HTTP 200 immediately before Slack judging or recording;
   do not count a Free-tier cold start as acknowledgement-latency evidence.
-- [ ] Free UptimeRobot HTTPS monitor checks `/readyz` every five minutes, has an
-  alert contact, and remains enabled through the August 11 winner announcement.
-- [ ] August 9 continuity check confirms UptimeRobot health, Render database
-  expiry, included usage, spend controls, and the official announcement date.
+- [ ] Free UptimeRobot HTTPS monitor checks `/healthz` every five minutes, has
+  an alert contact, and remains enabled until winners are actually announced.
+- [ ] Daily continuity check confirms UptimeRobot health, `/readyz`, Render and
+  Neon included usage, spend controls, and the official announcement status.
 - [ ] Stable `/healthz`, `/readyz`, and `/slack/events` URLs are verified.
 - [ ] Stable-host acknowledgement/security probe passes and is recorded in
   [PLANS.md](../PLANS.md).

@@ -108,10 +108,12 @@ Phase-1 receiver at a stable TLS URL for the live Slack gate. They do not add a
 product surface, connector, outcome type, or claim of a live deployment. The
 image uses digest-pinned bases and a non-root runtime; account-side Render
 configuration and the public endpoint still require live verification. The
-Blueprint pins both resources to Render's Free instance type. Because that tier
-sleeps when idle and its database expires after 30 days, it is a hackathon
-sandbox rather than always-on production infrastructure; wake and verify
-`/readyz` immediately before a Slack test or judge session.
+Blueprint pins one Render web service to the Free instance type and accepts a
+secret Neon Free PostgreSQL URL at deployment. Neon has no Free-plan time limit,
+so delayed judging does not force a database replacement. UptimeRobot monitors
+`/healthz` every five minutes to keep the receiver warm; `/readyz` remains the
+end-to-end gate before a Slack test or judge session. These Free services still
+have usage limits and no production uptime SLA.
 
 Passing automation does not by itself complete the live Slack gate. After any
 manifest, scope, or deployment change, rerun the exact sandbox flow in

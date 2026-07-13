@@ -87,18 +87,24 @@ Message shortcut
   exact action review shows the target, before/after text, Block Kit hashes,
   plan hash, outcome/contract/policy versions, evidence snapshot, expiry, and
   reversibility before approval.
+- New shortcuts derive only the initial goal from the actual selected Slack
+  message and retain its real permalink. Generic completion, next-move, and
+  review templates were removed; those fields remain blank until the creator
+  explicitly enters them. Stored values still repopulate correction and
+  reassignment flows.
 - A bounded Docker/Render package exists only to host this same Phase-1
   receiver at the stable TLS URL the live Slack test requires. The image uses
   digest-pinned bases, runs as the non-root `node` user, exposes health and
   readiness endpoints, and serializes migrations. Local PostgreSQL is bound to
-  loopback; Render is configured for its managed database and `/readyz`. This
-  packaging adds no integration, outcome type, or product surface. Both Render
-  resources are explicitly Free; the documented cold-start and 30-day database
-  limits make this a hackathon sandbox, not always-on production hosting. No
-  live Render deployment is claimed until account-side evidence is captured.
-  After deployment, one secret-free five-minute external `/readyz` probe keeps
-  the judge endpoint warm and alerts on failure through the scheduled August 11
-  winner announcement; this is hosting availability, not outcome monitoring.
+  loopback. Render is configured as one Free Oregon web service with `/healthz`
+  liveness; durable state uses a secret Neon Free PostgreSQL 17 Direct URL in
+  the matching Oregon region. Neon has no Free-plan time limit, avoiding the
+  30-day Render database expiry. This packaging adds no integration, outcome
+  type, or product surface. No live deployment is claimed until account-side
+  evidence is captured. After deployment, one secret-free five-minute external
+  `/healthz` probe keeps the judge endpoint warm until winners are actually
+  announced; `/readyz` remains the database gate. This is hosting availability,
+  not outcome monitoring.
 - A clean no-cache image build reports zero dependency vulnerabilities. The
   running image is healthy in production mode as the non-root `node` user;
   `/healthz` and `/readyz` both return 200, `.env`, `.git`, source, and tests are
