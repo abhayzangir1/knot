@@ -121,8 +121,8 @@ Message shortcut
   owner closure card can reopen and stale the former closure evidence. Role
   cards do not expose another person's action.
 - Current automated evidence after the recovery, authorization, and packaging
-  pass: the default release run passes 164 tests with five PostgreSQL-gated
-  tests skipped; the isolated PostgreSQL run passes all 169 tests in 20 files.
+  pass: the default release run passes 165 tests with five PostgreSQL-gated
+  tests skipped; the isolated PostgreSQL run passes all 170 tests in 20 files.
   Formatter, linter,
   typecheck, build, production and full dependency audits, non-root container
   inspection, local readiness, and the temporary public `/readyz` endpoint all
