@@ -129,5 +129,6 @@ This probe does not replace the live state-changing Slack flow. It proves only
 the signed cross-workspace rejection path and fails when p95 is 500 ms or more,
 p99 is one second or more, or any sample reaches three seconds.
 
-See [Slack setup](docs/SLACK_SETUP.md), [deployment](docs/DEPLOYMENT.md), and
-[local development](docs/LOCAL_DEVELOPMENT.md).
+See [Slack setup](docs/SLACK_SETUP.md), [deployment](docs/DEPLOYMENT.md),
+[local development](docs/LOCAL_DEVELOPMENT.md), and the
+[submission checklist](docs/SUBMISSION_CHECKLIST.md).
