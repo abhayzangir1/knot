@@ -1,0 +1,47 @@
+export const slackIds = {
+  shortcutTieLooseEnd: "knot_tie_up_loose_end",
+  views: {
+    preparing: "knot_preparing_outcome_v1",
+    contractPreview: "knot_contract_preview_v1",
+    contractCorrection: "knot_contract_correction_v1",
+    ownerReassignment: "knot_owner_reassignment_v1",
+    delegation: "knot_delegation_v1",
+    actionPreview: "knot_action_preview_v1",
+    closureProof: "knot_closure_proof_v1",
+  },
+  actions: {
+    ownerAccept: "knot_owner_accept_v1",
+    ownerDecline: "knot_owner_decline_v1",
+    outcomeCheck: "knot_outcome_check_v1",
+    outcomeMove: "knot_outcome_move_v1",
+    outcomeClose: "knot_outcome_close_v1",
+    outcomeCorrect: "knot_outcome_correct_v1",
+    ownerReassign: "knot_owner_reassign_v1",
+    outcomeDelegate: "knot_outcome_delegate_v1",
+    outcomeDelete: "knot_outcome_delete_v1",
+    outcomeReopen: "knot_outcome_reopen_v1",
+    actionReview: "knot_action_review_v1",
+    actionExecute: "knot_action_execute_v1",
+    actionCancel: "knot_action_cancel_v1",
+    actionRollback: "knot_action_rollback_v1",
+  },
+  blocks: {
+    outcomeType: "knot_outcome_type_v1",
+    goal: "knot_goal_v1",
+    owner: "knot_owner_v1",
+    reviewer: "knot_reviewer_v1",
+    definition: "knot_definition_v1",
+    nextMove: "knot_next_move_v1",
+    nextMoveActor: "knot_next_move_actor_v1",
+    reviewPoint: "knot_review_point_v1",
+    visibility: "knot_visibility_v1",
+    closureEvidence: "knot_closure_evidence_v1",
+    changeReason: "knot_change_reason_v1",
+    delegateUser: "knot_delegate_user_v1",
+    delegatePermissions: "knot_delegate_permissions_v1",
+    delegateExpiry: "knot_delegate_expiry_v1",
+  },
+} as const;
+
+export type Block = Record<string, unknown>;
+export type SlackView = Record<string, unknown>;

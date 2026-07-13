@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1783855607047,
+      "tag": "0000_thick_agent_zero",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783856130195,
+      "tag": "0001_needy_morgan_stark",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783871431507,
+      "tag": "0002_tenant_row_level_security",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783872000000,
+      "tag": "0003_force_tenant_row_level_security",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783923629577,
+      "tag": "0004_cultured_bullseye",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783925467145,
+      "tag": "0005_lush_amphibian",
+      "breakpoints": true
+    }
+  ]
+}

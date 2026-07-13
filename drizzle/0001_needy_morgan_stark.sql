@@ -1,0 +1,1 @@
+ALTER TABLE "outcome_contracts" ALTER COLUMN "definition_of_done" SET DATA TYPE text;
