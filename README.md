@@ -5,6 +5,8 @@ a confirmed Outcome Contract, obtains an explicit accountable owner, then
 permits only a previewed and authorized reversible Slack-card update. It is not
 a generic task manager or chatbot.
 
+![Knot architecture](docs/architecture.svg)
+
 The confirmation modal supports exactly five outcome types: **Request**,
 **Decision**, **Commitment**, **Handoff**, and **Other**. The selected type
 controls the closure-evidence rule; Knot never labels every outcome as a

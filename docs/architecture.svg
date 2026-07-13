@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="940" viewBox="0 0 1600 940" role="img" aria-labelledby="title description">
+  <title id="title">Knot system architecture</title>
+  <desc id="description">Slack and authenticated MCP requests enter thin transport adapters, derive a verified actor context, and call deterministic outcome and policy services backed by tenant-scoped PostgreSQL and durable delivery workers.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="1" stop-color="#eef4ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <style>
+      .title { font: 700 42px Inter, Segoe UI, sans-serif; fill: #0f172a; }
+      .subtitle { font: 400 20px Inter, Segoe UI, sans-serif; fill: #475569; }
+      .eyebrow { font: 700 14px Inter, Segoe UI, sans-serif; letter-spacing: 1.8px; fill: #2563eb; }
+      .heading { font: 700 22px Inter, Segoe UI, sans-serif; fill: #0f172a; }
+      .body { font: 400 16px Inter, Segoe UI, sans-serif; fill: #334155; }
+      .small { font: 600 14px Inter, Segoe UI, sans-serif; fill: #475569; }
+      .pill { font: 700 13px Inter, Segoe UI, sans-serif; fill: #ffffff; }
+      .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; filter: url(#shadow); }
+      .trusted { fill: #eff6ff; stroke: #60a5fa; stroke-width: 2; filter: url(#shadow); }
+      .authority { fill: #ecfdf5; stroke: #34d399; stroke-width: 3; filter: url(#shadow); }
+      .storage { fill: #fff7ed; stroke: #fb923c; stroke-width: 2; filter: url(#shadow); }
+      .line { fill: none; stroke: #475569; stroke-width: 3; marker-end: url(#arrow); }
+      .dash { fill: none; stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 8 8; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="940" fill="url(#background)"/>
+  <text x="90" y="78" class="eyebrow">KNOT · SLACK-NATIVE OUTCOME COORDINATOR</text>
+  <text x="90" y="130" class="title">One policy core. Two secure transports.</text>
+  <text x="90" y="166" class="subtitle">The model may propose. Only deterministic services can authorize, execute, compensate, or close.</text>
+
+  <rect x="90" y="215" width="400" height="130" rx="22" class="box"/>
+  <rect x="111" y="236" width="94" height="28" rx="14" fill="#4a154b"/>
+  <text x="128" y="256" class="pill">SLACK</text>
+  <text x="112" y="294" class="heading">Native interaction surfaces</text>
+  <text x="112" y="322" class="body">Message shortcut · Modals · Private cards</text>
+
+  <rect x="1110" y="215" width="400" height="130" rx="22" class="box"/>
+  <rect x="1131" y="236" width="82" height="28" rx="14" fill="#2563eb"/>
+  <text x="1149" y="256" class="pill">MCP</text>
+  <text x="1132" y="294" class="heading">Authenticated tool requests</text>
+  <text x="1132" y="322" class="body">Strict schemas · Origin checks · Actor binding</text>
+
+  <path d="M290 345 L290 410 L520 410" class="line"/>
+  <path d="M1310 345 L1310 410 L1080 410" class="line"/>
+
+  <rect x="440" y="385" width="720" height="150" rx="24" class="trusted"/>
+  <text x="475" y="425" class="eyebrow">VERIFIED REQUEST BOUNDARY</text>
+  <text x="475" y="462" class="heading">Thin Slack and MCP transport adapters</text>
+  <text x="475" y="492" class="body">Verify signature or caller · bind installation and tenant · validate minimal shape</text>
+  <text x="475" y="518" class="small">Slack path: bounded durable receipt → immediate acknowledgement → asynchronous work</text>
+
+  <path d="M800 535 L800 590" class="line"/>
+
+  <rect x="315" y="575" width="970" height="155" rx="26" class="authority"/>
+  <text x="350" y="618" class="eyebrow" style="fill:#047857">SOLE DOMAIN AUTHORITY</text>
+  <text x="350" y="660" class="heading">Deterministic application services + versioned policy services</text>
+  <text x="350" y="693" class="body">Outcome Contract · lifecycle · audience · role authority · exact-plan approval</text>
+  <text x="350" y="718" class="body">idempotent execution · rollback/compensation · evidence-based closure · audit</text>
+
+  <path d="M570 730 L570 790" class="line"/>
+  <path d="M1030 730 L1030 790" class="line"/>
+
+  <rect x="190" y="775" width="560" height="120" rx="22" class="storage"/>
+  <text x="220" y="815" class="heading">PostgreSQL system of record</text>
+  <text x="220" y="846" class="body">Tenant-scoped repositories · RLS · optimistic concurrency</text>
+  <text x="220" y="872" class="body">Append-only audit · inbox/outbox · redacted retention</text>
+
+  <rect x="850" y="775" width="560" height="120" rx="22" class="box"/>
+  <text x="880" y="815" class="heading">Durable delivery workers</text>
+  <text x="880" y="846" class="body">Slack Web API receipts · retry/reconciliation · exact rollback</text>
+  <text x="880" y="872" class="body">No success claim without a verified provider receipt</text>
+
+  <path d="M750 835 L850 835" class="line"/>
+  <rect x="90" y="195" width="1420" height="710" rx="32" class="dash"/>
+  <text x="1510" y="925" text-anchor="end" class="small">Trust boundaries are explicit; button values and model output never grant authority.</text>
+</svg>
