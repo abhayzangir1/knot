@@ -60,8 +60,9 @@ Message shortcut
   projection and sends a detailed summary only to explicit audience principals
   with both `view` and `evidence_access`. Knot retains its audit record rather
   than creating an archive channel or deleting Slack content.
-- The manifest removed private-channel create/invite permissions and retains
-  `im:history` for two bounded safety reads: version-checking an app-owned DM
+- The manifest removed private-channel create/invite permissions, retains the
+  required `commands` scope for its message shortcut, and retains `im:history`
+  for two bounded safety reads: version-checking an app-owned DM
   card before rollback, and retry-only reconciliation after an ambiguous
   private-message delivery. First-attempt delivery does not read history. It
   adds `users:read` solely to reject bot, app, deleted, or mismatched members

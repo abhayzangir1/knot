@@ -29,7 +29,7 @@
   },
   "oauth_config": {
     "scopes": {
-      "bot": ["chat:write", "im:write", "im:history", "users:read"]
+      "bot": ["chat:write", "commands", "im:write", "im:history", "users:read"]
     }
   },
   "settings": {

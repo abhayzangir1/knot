@@ -10,7 +10,9 @@ https://knot-1pc1.onrender.com/slack/events
 ```
 
 The manifest intentionally requests only the scopes used by the skeleton:
-`chat:write`, `im:write`, `im:history`, and `users:read`. Knot uses `im:history`
+`chat:write`, `commands`, `im:write`, `im:history`, and `users:read`. The
+`commands` scope is required for the message shortcut; Knot defines no slash
+command. Knot uses `im:history`
 for two bounded safety reads: comparing the current app-owned direct-message
 card before rollback, and scanning recent opaque message metadata only after an
 ambiguous private-message delivery retry. First-attempt delivery does not read

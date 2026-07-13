@@ -77,9 +77,9 @@ readiness if Slack authentication fails. The token is intentionally bound to
 the exact workspace returned by `auth.test`; signed interactions from any other
 team are rejected before durable work is accepted.
 
-The manifest uses `users:read` only to confirm that owners, next-move owners,
-and reviewers are active human members. Knot does not request user email
-access.
+The manifest uses `commands` only for its message shortcut and `users:read`
+only to confirm that owners, next-move owners, and reviewers are active human
+members. Knot defines no slash command and does not request user email access.
 
 ## Verification
 

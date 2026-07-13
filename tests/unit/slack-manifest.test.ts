@@ -20,6 +20,7 @@ describe("Slack manifest least privilege", () => {
 
     expect(manifest.oauth_config.scopes.bot).toEqual([
       "chat:write",
+      "commands",
       "im:write",
       "im:history",
       "users:read",
