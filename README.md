@@ -1,5 +1,12 @@
 # Knot
 
+> **Frozen continuation snapshot — 2026-07-14.** This repository preserves the
+> tested Phase-1 implementation that existed when the Slack Agent Builder
+> Challenge closed. The live acceptance gate and planned MCP integration are
+> incomplete; this is not a claim of hackathon eligibility or a finished
+> release. Start with the [continuation guide](docs/CONTINUATION_GUIDE.md) and
+> create new work from the `archive-2026-07-14` tag.
+
 Knot is a Slack-native outcome coordinator. It turns one selected message into
 a confirmed Outcome Contract, obtains an explicit accountable owner, then
 permits only a previewed and authorized reversible Slack-card update. It is not
@@ -138,3 +145,13 @@ p99 is one second or more, or any sample reaches three seconds.
 See [Slack setup](docs/SLACK_SETUP.md), [deployment](docs/DEPLOYMENT.md),
 [local development](docs/LOCAL_DEVELOPMENT.md), and the
 [submission checklist](docs/SUBMISSION_CHECKLIST.md).
+
+## Continue the project
+
+The frozen snapshot is intentionally honest about unpassed live gates and
+unimplemented integrations. [CONTINUATION_GUIDE.md](docs/CONTINUATION_GUIDE.md)
+lists what works, what remains, the required implementation order, and the
+security rules contributors must preserve.
+
+Knot is licensed under the [MIT License](LICENSE), so anyone may fork, modify,
+and continue it subject to the license terms.

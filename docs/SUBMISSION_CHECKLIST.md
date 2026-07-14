@@ -1,5 +1,10 @@
 # Knot submission checklist
 
+> **Historical checklist:** The deadline passed with incomplete items below.
+> This file records unfinished evidence; it is not an accepted submission
+> receipt and must not be used to claim that Knot or its planned MCP integration
+> was complete. Continue from [CONTINUATION_GUIDE.md](CONTINUATION_GUIDE.md).
+
 **Track:** New Slack Agent  
 **Deadline:** 2026-07-13 5:00 p.m. PDT / 2026-07-14 5:30 a.m. IST  
 **Rule:** No item is marked complete without current evidence. Local automation

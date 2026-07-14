@@ -2,6 +2,12 @@
 
 ## Status
 
+**Frozen continuation snapshot (2026-07-14):** The repository is packaged for
+public continuation at tag `archive-2026-07-14`. This does not change any gate
+status or convert partial implementation into acceptance evidence. New work
+should branch from the tag and follow
+[docs/CONTINUATION_GUIDE.md](docs/CONTINUATION_GUIDE.md).
+
 Architecture is frozen as of 2026-07-12. The active engineering objective is
 the live Slack walking skeleton. This plan intentionally makes no feature
 commitment beyond the frozen release boundary.
@@ -159,10 +165,8 @@ Message shortcut
 - Current automated evidence after the recovery, authorization, packaging,
   D-054/D-055, status-coalescing, and D-058 regression passes: the default
   release run passes 176 tests with five PostgreSQL-gated tests skipped (181
-  total). The last isolated
-  PostgreSQL run, before D-054/D-055, passed all then-existing 170 tests; the
-  isolated suite must be rerun against a disposable PostgreSQL database before
-  this gate can close. Formatter, linter,
+  total). A fresh 2026-07-14 isolated PostgreSQL run after D-054 through D-058
+  passed all 181 tests and removed its disposable test database. Formatter, linter,
   typecheck, build, production and full dependency audits, non-root container
   inspection, local readiness, and the temporary public `/readyz` endpoint all
   pass. The live end-to-end Slack interaction trace is still required and Phase
